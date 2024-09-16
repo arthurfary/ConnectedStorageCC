@@ -76,8 +76,9 @@ function f.print_table(node, dump   )
     table.insert(output,output_str)
     output_str = table.concat(output)
 
-    if dump then
-        file = fs.open('dump.txt', 'w')
+    print(dump)
+    if dump == true then
+        file = fs.open(fs.combine(fs.getDir(shell.getRunningProgram()), 'dump.txt'), 'w')
         file.write(output_str)
         file.close()
     end

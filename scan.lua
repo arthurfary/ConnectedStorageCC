@@ -61,11 +61,30 @@ function functions.get_barrel_items_table()
     return items
 end    
 
+-- Function to retrieve all items summed
+function functions.get_items_sum()
+    -- {
+    --     ['minecraft:oak_button'] = 64,
+    --     ['computercraft:computer_advanced'] = 2,
+    --     ['minecraft:diamond'] = 64,
+    --     ['minecraft:chest'] = 65,
+    --     ['minecraft:barrel'] = 1,
+    --     ['computercraft:wired_modem'] = 64,
+    --     ['computercraft:cable'] = 64
+    -- }
+    local barrel_items_table = functions.get_barrel_items_table()
+    local items_sum = {}
+
+    for _, barrel in pairs(barrel_items_table) do
+        for _, filled_slot in pairs(barrel) do
+            if items_sum[filled_slot['name']] == nil then items_sum[filled_slot['name']] = 0 end
+            items_sum[filled_slot['name']] = items_sum[filled_slot['name']] + filled_slot['count']
+        end
+    end
+    
+    return items_sum
+end
+
+
 
 return functions
-
-  
-
--- for slot, item in pairs(barrels.list()) do
-   -- print(("%d x %s in slot %d"):format(item.count, item.name, slot))
--- end

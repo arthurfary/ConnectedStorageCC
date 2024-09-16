@@ -1,46 +1,9 @@
 {
-	['peripheral: 25745905'] = {
-		[14] = {
-			['name'] = 'minecraft:chest',
-			['count'] = 64
-		}
-	},
-	['peripheral: 7abeac1f'] = {
-		[1] = {
-			['name'] = 'minecraft:barrel',
-			['count'] = 1
-		}
-	},
-	['peripheral: 35f05346'] = {
-		[1] = {
-			['name'] = 'computercraft:computer_advanced',
-			['count'] = 1
-		}
-	},
-	['peripheral: 46350f3f'] = {
-		[26] = {
-			['name'] = 'computercraft:wired_modem',
-			['count'] = 61
-		}
-	},
-	['peripheral: 41f4221c'] = {
-		[13] = {
-			['name'] = 'computercraft:cable',
-			['count'] = 64
-		},
-		[15] = {
-			['name'] = 'computercraft:computer_advanced',
-			['count'] = 1
-		}
-	},
-	['peripheral: 73f6672b'] = {
-		[10] = {
-			['name'] = 'minecraft:chest',
-			['count'] = 1
-		},
-		[11] = {
-			['name'] = 'computercraft:wired_modem',
-			['count'] = 3
-		}
-	}
+	['minecraft:oak_button'] = 64,
+	['computercraft:computer_advanced'] = 2,
+	['minecraft:diamond'] = 64,
+	['minecraft:chest'] = 65,
+	['minecraft:barrel'] = 1,
+	['computercraft:wired_modem'] = 64,
+	['computercraft:cable'] = 64
 }
