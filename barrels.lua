@@ -12,7 +12,28 @@ function menu()
 	print("All systems operational")
 	print('Use "?" to list commands.')
 	print("\n")
-	print(">")
+	print("> ")
+
+	local choice = read()
+	handleChoice(choice)
+end
+
+function handleChoice(choice)
+	local options = {
+		["?"] = "Show this help menu",
+	}
+
+	if not options[choice] then
+		print("Invalid choice.")
+		return
+	end
+
+	if choice == "?" then
+		print("Available commands are:")
+		for command, desc in pairs(options) do
+			print(command .. ": " .. desc)
+		end
+	end
 end
 
 menu()
