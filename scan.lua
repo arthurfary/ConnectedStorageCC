@@ -89,4 +89,15 @@ function functions.get_items_sum()
 	return items_sum
 end
 
+-- Utility function to extract item names from the item sum
+function functions.get_item_names()
+	local item_sum = functions.get_items_sum()
+
+	local item_names = {}
+	for item_name, _ in pairs(item_sum) do
+		table.insert(item_names, item_name)
+	end
+	return item_names
+end
+
 return functions

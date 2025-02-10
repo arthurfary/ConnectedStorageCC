@@ -1,8 +1,6 @@
 local barrels = require("scan")
 local utils = require("utils")
-
--- local chests = barrels.get_barrel_items_table()
-local item_sum = barrels.get_items_sum()
+local fuzzy = require("fuzzy_find")
 
 -- Interface
 function menu()
@@ -11,31 +9,55 @@ function menu()
 	print(barrel_count .. " Barrels detected.")
 	print("All systems operational")
 	print('Use "?" to list commands.')
-	print("\n")
-	print("> ")
+	print("\n> ")
 
-	local choice = read()
-	handleChoice(choice)
+	local input = read()
+	handle_choice(input)
 end
 
-function handleChoice(choice)
+function handle_choice(input)
 	local options = {
 		["?"] = "Show this help menu",
 	}
 
-	if not options[choice] then
+	if not options[input] then
 		print("Invalid choice.")
 		return
 	end
 
-	if choice == "?" then
+	if input == "?" then
 		print("Available commands are:")
 		for command, desc in pairs(options) do
 			print(command .. ": " .. desc)
 		end
+		return
+	end
+
+	--TODO: MAKE SO 10 OR SO RESULTS ARE DISPLAYED
+
+	-- if not reserved command, search for the item
+	local items_found = search_for_item(input)
+
+	-- Display the most similar item based on the search result
+	if #items_found > 0 then
+		print(items_found[1][1]) -- Print the most similar item name (first result)
+	else
+		print("No items found.")
 	end
 end
 
-menu()
+function search_for_item(search_term)
+	local item_names = barrels.get_item_names()
 
--- utils.print_table(item_sum, true)
+	-- Get fuzzy search results
+	local result = fuzzy.filter(search_term, item_names)
+
+	-- Sort results by score in descending order
+	table.sort(result, function(a, b)
+		return a[3] > b[3]
+	end)
+
+	return result
+end
+
+menu()
