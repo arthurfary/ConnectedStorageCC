@@ -94,9 +94,21 @@ function selection_menu(options, header)
 		elseif key == keys.down and curr_index < #options then
 			curr_index = curr_index + 1
 		elseif key == keys.enter then
-			return options[curr_index]
+			local return_dict = {
+				show_name = SHOW_NAMES[options[curr_index][1]],
+				item_name = ITEM_NAMES[options[curr_index][1]],
+				count = ITEM_SUM[ITEM_NAMES[options[curr_index][1]]],
+			}
+			return return_dict
 		end
 	end
+end
+
+function handle_action(item)
+	reset_term()
+
+	print("Selected item: " .. item.show_name)
+	print("Avaliable: " .. item.count)
 end
 
 function handle_choice(input)
@@ -106,9 +118,8 @@ function handle_choice(input)
 	-- Display the most similar item based on the search result
 	if #items_found > 0 then
 		--TODO:02/10/2025 Make a menu for the selected item, so it can be brought to the player
-		--
 		local selected = selection_menu(items_found, "Select an item")
-		print("SELECTED: " .. SHOW_NAMES[selected[1]])
+		handle_action(selected)
 	else
 		print("No items found.")
 	end
