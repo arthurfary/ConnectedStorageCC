@@ -109,6 +109,9 @@ function handle_action(item)
 
 	print("Selected item: " .. item.show_name)
 	print("Avaliable: " .. item.count)
+
+	print("\nChoose amount to take: ")
+	local amount = read()
 end
 
 function handle_choice(input)
