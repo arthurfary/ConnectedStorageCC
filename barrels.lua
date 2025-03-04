@@ -2,6 +2,21 @@ local barrels = require("scan")
 local utils = require("utils")
 local fuzzy = require("fuzzy_find")
 
+local config_file = "config.lua"
+
+local config = (function()
+    local file = fs.open(config_file, "r")
+    if not file then
+        return {}
+    end
+    local data = textutils.unserialize(file.readAll())
+    file.close()
+    return data or {}
+end)()
+
+local input_output_container = peripheral.wrap(config.input_output_barrel_name)
+
+
 ITEM_SUM = barrels.get_items_sum()
 ITEM_NAMES, SHOW_NAMES = (function()
 	local temp_table_names = {}
@@ -111,7 +126,38 @@ function handle_action(item)
 	print("Avaliable: " .. item.count)
 
 	print("\nChoose amount to take: ")
-	local amount = read()
+	local amount = tonumber(read())
+
+	move_items(input_output_container, amount, item)
+end
+
+function move_items(to_container, count, item)
+    if count > ITEM_SUM[item.item_name] then
+        print('Requested more than available')
+        return
+    end
+
+    local remaining = count
+    local barrels_list = barrels.get_barrels()
+
+    for _, barrel in pairs(barrels_list) do
+        for slot, barrel_item in pairs(barrel.list()) do
+            if barrel_item.name == item.item_name then
+                local move_count = math.min(remaining, barrel_item.count)
+                local moved = barrel.pushItems(peripheral.getName(input_output_container), slot, move_count)
+                if moved < move_count then
+                    print('Output barrel is full')
+                    return
+                end
+                remaining = remaining - move_count
+				print(".")
+                if remaining <= 0 then
+                    print('Items moved successfully')
+                    return
+                end
+            end
+        end
+    end
 end
 
 function handle_choice(input)

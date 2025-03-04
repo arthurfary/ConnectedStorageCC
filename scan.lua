@@ -1,5 +1,17 @@
 local functions = {}
 
+-- Load configuration
+local config_file = "config.lua"
+local config = (function()
+    local file = fs.open(config_file, "r")
+    if not file then
+        return {}
+    end
+    local data = textutils.unserialize(file.readAll())
+    file.close()
+    return data or {}
+end)()
+
 -- Function to retrieve all connected barrels (i.e., peripherals of type "minecraft:barrel").
 function functions.get_barrels()
 	-- Get the names of all connected peripherals.
@@ -9,8 +21,8 @@ function functions.get_barrels()
 
 	-- Loop through the list of connected peripherals.
 	for _, per in pairs(connected_peripherals) do
-		-- Check if the peripheral type is "minecraft:barrel".
-		if peripheral.getType(per) == "minecraft:barrel" then
+		-- Check if the peripheral type is "minecraft:barrel" and it's not the input/output barrel.
+		if peripheral.getType(per) == "minecraft:barrel" and per ~= config.input_output_barrel_name then
 			-- If it is a barrel, wrap it into a peripheral object and insert it into the barrels table.
 			table.insert(barrels, peripheral.wrap(per))
 		end
