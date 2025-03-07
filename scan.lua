@@ -1,16 +1,7 @@
 local functions = {}
 
 -- Load configuration
-local config_file = "config.lua"
-local config = (function()
-    local file = fs.open(config_file, "r")
-    if not file then
-        return {}
-    end
-    local data = textutils.unserialize(file.readAll())
-    file.close()
-    return data or {}
-end)()
+local config = require("config")
 
 -- Function to retrieve all connected barrels (i.e., peripherals of type "minecraft:barrel").
 function functions.get_barrels()
