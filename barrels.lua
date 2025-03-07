@@ -5,17 +5,16 @@ local fuzzy = require("fuzzy_find")
 local config_file = "config.lua"
 
 local config = (function()
-    local file = fs.open(config_file, "r")
-    if not file then
-        return {}
-    end
-    local data = textutils.unserialize(file.readAll())
-    file.close()
-    return data or {}
+	local file = fs.open(config_file, "r")
+	if not file then
+		return {}
+	end
+	local data = textutils.unserialize(file.readAll())
+	file.close()
+	return data or {}
 end)()
 
 local input_output_container = peripheral.wrap(config.input_output_barrel_name)
-
 
 ITEM_SUM = barrels.get_items_sum()
 ITEM_NAMES, SHOW_NAMES = (function()
@@ -129,35 +128,38 @@ function handle_action(item)
 	local amount = tonumber(read())
 
 	move_items(input_output_container, amount, item)
+
+	print("Press any key to return to menu")
+	os.pullEvent("key")
 end
 
 function move_items(to_container, count, item)
-    if count > ITEM_SUM[item.item_name] then
-        print('Requested more than available')
-        return
-    end
+	if count > ITEM_SUM[item.item_name] then
+		print("Requested more than available")
+		return
+	end
 
-    local remaining = count
-    local barrels_list = barrels.get_barrels()
+	local remaining = count
+	local barrels_list = barrels.get_barrels()
 
-    for _, barrel in pairs(barrels_list) do
-        for slot, barrel_item in pairs(barrel.list()) do
-            if barrel_item.name == item.item_name then
-                local move_count = math.min(remaining, barrel_item.count)
-                local moved = barrel.pushItems(peripheral.getName(input_output_container), slot, move_count)
-                if moved < move_count then
-                    print('Output barrel is full')
-                    return
-                end
-                remaining = remaining - move_count
+	for _, barrel in pairs(barrels_list) do
+		for slot, barrel_item in pairs(barrel.list()) do
+			if barrel_item.name == item.item_name then
+				local move_count = math.min(remaining, barrel_item.count)
+				local moved = barrel.pushItems(peripheral.getName(input_output_container), slot, move_count)
+				if moved < move_count then
+					print("Output barrel is full")
+					return
+				end
+				remaining = remaining - move_count
 				print(".")
-                if remaining <= 0 then
-                    print('Items moved successfully')
-                    return
-                end
-            end
-        end
-    end
+				if remaining <= 0 then
+					print("Items moved successfully")
+					return
+				end
+			end
+		end
+	end
 end
 
 function handle_choice(input)
@@ -166,7 +168,6 @@ function handle_choice(input)
 
 	-- Display the most similar item based on the search result
 	if #items_found > 0 then
-		--TODO:02/10/2025 Make a menu for the selected item, so it can be brought to the player
 		local selected = selection_menu(items_found, "Select an item")
 		handle_action(selected)
 	else
@@ -186,4 +187,6 @@ function search_for_item(search_term)
 	return result
 end
 
-menu()
+while true do
+	menu()
+end
