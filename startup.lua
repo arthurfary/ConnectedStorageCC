@@ -1,1 +1,1 @@
-shell.run("barrels")
+shell.run("main")
